@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.networkobserverdemo.R
+import com.example.networkobserverdemo.databinding.ActivitySubBinding
 import com.example.networkobserverdemo.viewmodel.SubViewModel
 
 class SubActivity : AppCompatActivity() {
@@ -19,9 +21,12 @@ class SubActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate, $this")
-        setContentView(R.layout.activity_sub)
 
         viewModel = ViewModelProvider.NewInstanceFactory().create(SubViewModel::class.java)
+        val binding =
+            DataBindingUtil.setContentView<ActivitySubBinding>(this, R.layout.activity_sub)
+        binding.viewModel = viewModel
+
         setupRestartMainActivity()
         Toast.makeText(this, R.string.view_created, Toast.LENGTH_LONG).show()
     }
