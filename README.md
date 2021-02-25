@@ -13,4 +13,5 @@ ConnectivityManager.NetworkCallback でネットワーク接続状態を監視�
 # 参考
 - [タスクとバックスタックについて](https://developer.android.com/guide/components/activities/tasks-and-back-stack?hl=ja)
 - [【Kotlin】ActivityのLaunchModeについて](https://qiita.com/s_emoto/items/1eeac92342f224bdd372)
+- [Android ログイン後にログイン画面に戻れないようにしたい](https://qiita.com/takehilo/items/e677c343d689d239bf81)
 - [Androidの勉強：Contextについて](https://qiita.com/iduchikun/items/34b3ae26cfc438e7e5dc)
