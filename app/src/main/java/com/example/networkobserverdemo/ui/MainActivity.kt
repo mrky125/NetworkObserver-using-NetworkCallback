@@ -21,5 +21,10 @@ class MainActivity : AppCompatActivity() {
         val binding =
             DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         binding.viewModel = viewModel
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
+        viewModel.setLocalData(this.hashCode())
     }
 }
