@@ -1,5 +1,6 @@
 package com.example.networkobserverdemo.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -32,10 +33,20 @@ class SubActivity : AppCompatActivity() {
     }
 
     private fun setupRestartMainActivity() {
-        viewModel.positiveButtonClick.observe(this) {
-            Log.d(TAG, "positiveButtonClick: $it")
-            // TODO: Restart from MainActivity
+        viewModel.positiveButtonClick.observe(this) { clicked ->
+            Log.d(TAG, "positiveButtonClick: $clicked")
+            if (clicked) {
+                startMainActivityWithClearingTask()
+            }
         }
+    }
+
+    private fun startMainActivityWithClearingTask() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            // 既存のスタックを全て削除し、MainActivityを作り直す
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
     }
 
     override fun onStart() {
