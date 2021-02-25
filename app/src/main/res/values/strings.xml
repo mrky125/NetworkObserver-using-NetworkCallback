@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">NetworkObserverDemo</string>
+
+    <string name="view_created">View Created!!</string>
+
+    <string name="toast_connected">Wifi Connecting, %s</string>
+    <string name="toast_disconnected">Disconnected.</string>
+
+    <string name="reset_stack_title">Reset Stack?</string>
+    <string name="reset_stack_yes">Fire!</string>
+    <string name="reset_stack_cancel">Cancel</string>
+</resources>
