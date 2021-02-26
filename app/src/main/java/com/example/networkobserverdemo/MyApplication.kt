@@ -2,6 +2,7 @@ package com.example.networkobserverdemo
 
 import android.app.Application
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
@@ -10,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.example.networkobserverdemo.ui.SubActivity
 
 class MyApplication : Application(), LifecycleObserver {
     
@@ -18,11 +20,16 @@ class MyApplication : Application(), LifecycleObserver {
         private lateinit var networkCallback: NetworkCallback
     }
 
+    private val wifiCallback: (Boolean) -> Unit = { isWifi ->
+        Log.d(TAG, "isWifi: $isWifi")
+        launchSubActivity()
+    }
+
     override fun onCreate() {
         super.onCreate()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         Log.d(TAG, "applicationContext: $applicationContext, baseContext: $baseContext")
-        networkCallback = NetworkCallback(applicationContext)
+        networkCallback = NetworkCallback(applicationContext, wifiCallback)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -33,7 +40,6 @@ class MyApplication : Application(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onApplicationStart() {
         Log.d(TAG, "_onApplicationStart")
-        Log.d(TAG, "requestNetwork")
         requestNetwork()
     }
 
@@ -50,7 +56,6 @@ class MyApplication : Application(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onApplicationStop() {
         Log.d(TAG, "_onApplicationStop")
-        Log.d(TAG, "unregisterNetwork")
         unregisterNetwork()
     }
 
@@ -75,5 +80,15 @@ class MyApplication : Application(), LifecycleObserver {
 //        Log.d(TAG, "cm:$cm")
         cm.unregisterNetworkCallback(networkCallback)
         Log.d(TAG, "released network request")
+    }
+
+    private fun launchSubActivity() {
+        val intent = Intent(applicationContext, SubActivity::class.java).apply {
+            // Activityの外（ActivityのContext以外）から起動する場合は NEW_TASK が必要
+            // バックスタックを全て削除して起動したい（戻れないようにしたい）ので CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        Log.d(TAG, "startActivity, context: $applicationContext")
+        applicationContext.startActivity(intent)
     }
 }
