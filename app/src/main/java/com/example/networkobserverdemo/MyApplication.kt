@@ -104,11 +104,7 @@ class MyApplication : Application(), LifecycleObserver, CoroutineScope {
     }
 
     private fun launchSubActivity() {
-        val intent = Intent(applicationContext, SubActivity::class.java).apply {
-            // Activityの外（ActivityのContext以外）から起動する場合は NEW_TASK が必要
-            // バックスタックを全て削除して起動したい（戻れないようにしたい）ので CLEAR_TASK
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+        val intent = Intent(applicationContext, SubActivity::class.java)
         Log.d(TAG, "startActivity, context: $applicationContext")
         applicationContext.startActivity(intent)
     }
