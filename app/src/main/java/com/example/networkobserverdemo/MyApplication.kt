@@ -11,18 +11,25 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.example.networkobserverdemo.data.source.remote.ApiClient
 import com.example.networkobserverdemo.ui.SubActivity
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
-class MyApplication : Application(), LifecycleObserver {
+class MyApplication : Application(), LifecycleObserver, CoroutineScope {
     
     companion object {
         private const val TAG = "MyApp" + " mori"
         private lateinit var networkCallback: NetworkCallback
     }
 
+    private lateinit var job: Job
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     private val wifiCallback: (Boolean) -> Unit = { isWifi ->
-        Log.d(TAG, "isWifi: $isWifi")
-        launchSubActivity()
+        Log.d(TAG, "isWifi: $isWifi, request api")
+        requestApi()
     }
 
     override fun onCreate() {
@@ -40,6 +47,8 @@ class MyApplication : Application(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onApplicationStart() {
         Log.d(TAG, "_onApplicationStart")
+        job = Job() // set new job (it starts active)
+        Log.d(TAG, "job: $job")
         requestNetwork()
     }
 
@@ -56,6 +65,9 @@ class MyApplication : Application(), LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onApplicationStop() {
         Log.d(TAG, "_onApplicationStop")
+        Log.d(TAG, "before cancel. job: $job")
+        job.cancel() // cancel current job (it will be cancelled)
+        Log.d(TAG, "after cancel. job: $job")
         unregisterNetwork()
     }
 
@@ -80,6 +92,15 @@ class MyApplication : Application(), LifecycleObserver {
 //        Log.d(TAG, "cm:$cm")
         cm.unregisterNetworkCallback(networkCallback)
         Log.d(TAG, "released network request")
+    }
+
+    private fun requestApi() {
+        Log.d(TAG, "coroutineContext: $coroutineContext")
+        launch {
+            Log.d(TAG, "coroutineScope: $this")
+            val result = ApiClient().getMockResponse()
+            if (result) launchSubActivity()
+        }
     }
 
     private fun launchSubActivity() {
