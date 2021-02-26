@@ -11,6 +11,13 @@ import com.example.networkobserverdemo.R
 import com.example.networkobserverdemo.databinding.ActivitySubBinding
 import com.example.networkobserverdemo.viewmodel.SubViewModel
 
+/**
+ * 想定する業務要件を満たした時に強制的に起動し、戻れないActivity
+ *
+ * バックボタンを押すと、アプリを終了する
+ * すでに最前面に表示中の場合は、新しいインスタンスは作成しない
+ * 起動モードは [Intent.FLAG_ACTIVITY_SINGLE_TOP]、ただしIntent.flagではなく AndroidManifest で定義
+ */
 class SubActivity : AppCompatActivity() {
 
     companion object {
