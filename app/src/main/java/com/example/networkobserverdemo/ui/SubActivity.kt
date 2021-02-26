@@ -55,4 +55,14 @@ class SubActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent().apply {
+            action = INTENT_ACTION_FINISH_APP
+        }
+        sendBroadcast(intent)
+        Log.d(TAG, "sendBroadcast, intent action: ${intent.action}")
+    }
 }
