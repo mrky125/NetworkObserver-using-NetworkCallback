@@ -11,7 +11,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.example.networkobserverdemo.data.source.remote.ApiClient
 import com.example.networkobserverdemo.ui.SubActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class MyApplication : Application(), LifecycleObserver {
     
@@ -20,9 +25,14 @@ class MyApplication : Application(), LifecycleObserver {
         private lateinit var networkCallback: NetworkCallback
     }
 
+    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+
     private val wifiCallback: (Boolean) -> Unit = { isWifi ->
-        Log.d(TAG, "isWifi: $isWifi")
-        launchSubActivity()
+        Log.d(TAG, "isWifi: $isWifi, request api")
+        scope.launch {
+            val result = ApiClient().getMockResponse()
+            if (result) launchSubActivity()
+        }
     }
 
     override fun onCreate() {
