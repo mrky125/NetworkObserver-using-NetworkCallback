@@ -55,4 +55,15 @@ class SubActivity : AppCompatActivity() {
         }
         startActivity(intent)
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java).apply {
+            // onNewIntentでこのアクションを受け取るとMainActivity（ルートアクティビティ）はfinishする、すなわちアプリ終了
+            action = INTENT_ACTION_FINISH_APP
+            // MainActivityの上にあるスタックをクリア、そして新しいインスタンスは作らずonNewIntentで受け取らせる
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        startActivity(intent)
+    }
 }
