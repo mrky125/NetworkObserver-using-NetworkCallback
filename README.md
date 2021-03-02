@@ -10,6 +10,9 @@ ConnectivityManager.NetworkCallback でネットワーク接続状態を監視�
 - このActivityがスタックの一番上にある場合、新しいインスタンスは作らず表示したままにする
   - launchMode `"singleTop"` を使用すればOK
 
+- アプリがバックグラウンドに移行した際は、ネットワーク状態の監視を止める
+- 再度フォアグラウンドに移行した際は、ネットワーク状態を監視する
+
 # 参考
 - [タスクとバックスタックについて](https://developer.android.com/guide/components/activities/tasks-and-back-stack?hl=ja)
 - [【Kotlin】ActivityのLaunchModeについて](https://qiita.com/s_emoto/items/1eeac92342f224bdd372)
